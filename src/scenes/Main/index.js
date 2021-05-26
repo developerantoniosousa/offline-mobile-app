@@ -11,6 +11,7 @@ import RepositorySchema from 'schemas/RepositorySchema';
 
 export function Main() {
   const [repositoryInputValue, setRepositoryInputValue] = useState('');
+  const [addRepositoryError, setAddRepositoryError] = useState(false);
 
   async function handleAddRepository() {
     try {
@@ -29,12 +30,14 @@ export function Main() {
 
       Keyboard.dismiss();
       setRepositoryInputValue('');
+      setAddRepositoryError(false);
     } catch (error) {
       showMessage({
         message: 'Falha no cadastro do repositório',
         description: error.message || null,
         type: 'danger'
       });
+      setAddRepositoryError(true);
     }
   }
 
@@ -48,6 +51,7 @@ export function Main() {
           autoCapitalize="none"
           autoCorrect={false}
           placeholder="Procurar repositório..."
+          hasError={addRepositoryError}
         />
         <Submit onPress={handleAddRepository}>
           <Icon name="add" size={22} color="#FFF" />
