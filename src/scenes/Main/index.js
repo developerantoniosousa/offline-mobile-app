@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { showMessage } from "react-native-flash-message";
 
 import { Container, Title, Form, Input, Submit, List } from './styles';
 import { Repository } from 'components/Repository';
@@ -26,7 +27,13 @@ export function Main() {
       RepositorySchema.add(repository);
 
       setRepositoryInputValue('');
-    } catch {}
+    } catch (error) {
+      showMessage({
+        message: 'Falha no cadastro do repositório',
+        description: error.message || null,
+        type: 'danger'
+      });
+    }
   }
 
   return (
