@@ -1,10 +1,10 @@
 import getRealm from 'services/realm';
 
-const entity = 'Repository';
+const ENTITY = 'Repository';
 
 class RepositorySchema {
     static schema = {
-        name: 'Repository',
+        name: ENTITY,
         primaryKey: 'id',
         properties: {
             id: { type: 'int', indexed: true },
@@ -20,7 +20,7 @@ class RepositorySchema {
         const database = await getRealm();
 
         database.write(() => {
-            database.create('Repository', data);
+            database.create(ENTITY, data);
         });
     }
 }
