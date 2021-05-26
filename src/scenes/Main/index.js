@@ -1,20 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { Container, Title, Form, Input, Submit, List } from './styles';
 import { Repository } from 'components/Repository';
 
+import RepositoryService from 'services/RepositoryService';
+import RepositorySchema from 'schemas/RepositorySchema';
+
 export function Main() {
+  const [repositoryInputValue, setRepositoryInputValue] = useState('');
+
+  async function handleAddRepository() {
+    try {
+      const { data } = await RepositoryService.get(repositoryInputValue);
+      
+      const repository = {
+        id: data.id,
+        name: data.name,
+        fullname: data.full_name,
+        description: data.description,
+        stars: data.stargazers_count,
+        forks: data.forks_count
+      }
+
+      RepositorySchema.add(repository);
+
+      setRepositoryInputValue('');
+    } catch {}
+  }
+
   return (
     <Container>
       <Title>Repositórios</Title>
       <Form>
         <Input
+          value={repositoryInputValue}
+          onChangeText={setRepositoryInputValue}
           autoCapitalize="none"
           autoCorrect={false}
           placeholder="Procurar repositório..."
         />
-        <Submit onPress={() => {}}>
+        <Submit onPress={handleAddRepository}>
           <Icon name="add" size={22} color="#FFF" />
         </Submit>
       </Form>
