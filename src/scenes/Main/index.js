@@ -59,6 +59,36 @@ export function Main() {
     }
   }
 
+  async function handleRefreshRepository({ fullname }) {
+    try {
+      const { data } = await RepositoryService.get(fullname);
+
+      const updatedRepository = {
+        id: data.id,
+        name: data.name,
+        fullname: data.full_name,
+        description: data.description,
+        stars: data.stargazers_count,
+        forks: data.forks_count
+      }
+
+      await RepositorySchema.update(updatedRepository);
+
+      setRepositories(
+        repositories.map(
+          repo => repo.id === updatedRepository.id
+            ? updatedRepository : repo
+        )
+      );
+    } catch (error) {
+      showMessage({
+        message: 'Falha na atualização do repositório',
+        description: error.message || null,
+        type: 'danger'
+      });
+    }
+  }
+
   return (
     <Container>
       <Title>Repositórios</Title>
@@ -81,7 +111,7 @@ export function Main() {
         data={repositories}
         keyExtractor={item => String(item.id)}
         renderItem={({item}) => (
-            <Repository data={item} />
+            <Repository data={item} onRefresh={() => handleRefreshRepository(item)} />
         )}
       />
     </Container>
