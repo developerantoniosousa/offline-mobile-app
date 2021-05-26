@@ -44,3 +44,10 @@ export const Submit = styled.TouchableOpacity.attrs({
     border-radius: 4px;
     padding: 0 14px;
 `;
+
+export const List = styled.FlatList.attrs({
+    contentContainerStyle: { paddingHorizontal: 20 },
+    showsVerticalScrollIndicator: false
+})`
+    margin-top: 20px;
+`;
