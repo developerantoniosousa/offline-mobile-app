@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Keyboard } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { showMessage } from "react-native-flash-message";
@@ -12,6 +12,24 @@ import RepositorySchema from 'schemas/RepositorySchema';
 export function Main() {
   const [repositoryInputValue, setRepositoryInputValue] = useState('');
   const [addRepositoryError, setAddRepositoryError] = useState(false);
+  const [repositories, setRepositories] = useState([]);
+
+  useEffect(() => {
+    loadRepositories();
+  }, []);
+
+  async function loadRepositories() {
+    try {
+      const response = await RepositorySchema.list();
+      setRepositories(response);
+    } catch (error) {
+      showMessage({
+        message: 'Falha no carregamento dos repositórios',
+        description: error.message || null,
+        type: 'warning'
+      });
+    }
+  }
 
   async function handleAddRepository() {
     try {
@@ -60,7 +78,7 @@ export function Main() {
 
       <List
         keyboardShouldPersistTaps="handler"
-        data={[]}
+        data={repositories}
         keyExtractor={item => String(item.id)}
         renderItem={({item}) => (
             <Repository data={item} />
