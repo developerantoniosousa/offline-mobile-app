@@ -30,6 +30,14 @@ class RepositorySchema {
         
         return repositories;
     }
+
+    static async update(data) {
+        const database = await getRealm();
+
+        database.write(() => {
+            database.create(ENTITY, data, 'modified');
+        });
+    }
 }
 
 export default RepositorySchema;
