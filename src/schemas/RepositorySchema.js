@@ -23,6 +23,13 @@ class RepositorySchema {
             database.create(ENTITY, data);
         });
     }
+
+    static async list() {
+        const database = await getRealm();
+        const repositories = database.objects(ENTITY).sorted('stars', true);
+        
+        return repositories;
+    }
 }
 
 export default RepositorySchema;
